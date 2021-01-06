@@ -65,21 +65,32 @@ validateForms('#contacts-form');
 
 // Smooth scroll and pageup
 
-$(window).scroll(function() {
-    if ($(this).scrollTop() > 4000) {
-        $('.pageup').fadeIn();
-    } else {
-        $('.pageup').fadeOut();
-    }
-});     
+$(function () {
+    $('[data-toggle="popover"]').popover();
+});	
 
-$("a[href='#up']").click(function(){
-    let _href = $(this).attr("href");
-    $("html, body").animate({scrollTop: $(_href).offset().top+"px"});
-    return false;
+document.querySelectorAll('a[href^="#"').forEach(link => {
+
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+
+let href = this.getAttribute('href').substring(1);
+
+const scrollTarget = document.getElementById(href);
+
+const topOffset = document.querySelector('.scrollto').offsetHeight;
+// const topOffset = 0; // если не нужен отступ сверху 
+const elementPosition = scrollTarget.getBoundingClientRect().top;
+const offsetPosition = elementPosition - topOffset;
+
+    window.scrollBy({
+            top: offsetPosition,
+            behavior: 'smooth'
+        });
+    });
 });
 
-new WOW().init();
+/* new WOW().init(); */
 
 $('form').submit(function(e) {
 	e.preventDefault();
