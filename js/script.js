@@ -1,5 +1,5 @@
 $(document).ready(function (){
-
+// Welcome 
     let today = new Date();
     let hourNow = today.getHours();
     let greeting;
@@ -7,11 +7,12 @@ $(document).ready(function (){
     if (hourNow >= 18){greeting = 'Добрый вечер!';}
         else if (hourNow >= 12){greeting = 'Добрый день!';}
             else if (hourNow >= 0){greeting = 'Доброе утро!';}
-                else {greeting = 'Приветствуем!';}
-    
-    $(".greeting").text(greeting);            
-
-
+                else {greeting = 'Приветствую!';}
+ 
+let welcome = document.querySelector('.greeting');
+    welcome.insertAdjacentHTML('beforebegin', greeting);               
+            
+// hamburger
 let hamburger = document.querySelector('.hamburger'),		
 	menu = document.querySelector('.menu'),
 	closeElem = document.querySelector('.menu__close');
@@ -33,8 +34,7 @@ lines[i].style.width = item.innerHTML;
 
 $('input[name=phone]').mask("+7 (999) 999-99-99");
 
-// validateForms
-   
+// validateForms 
 function validateForms(form){
     $(form).validate({
         rules: {
@@ -62,13 +62,12 @@ function validateForms(form){
 
 validateForms('#contacts-form');
 
-
-// Smooth scroll and pageup
-
+// popover
 $(function () {
     $('[data-toggle="popover"]').popover();
 });	
 
+// slow scroll
 document.querySelectorAll('a[href^="#"').forEach(link => {
 
     link.addEventListener('click', function(e) {
@@ -90,6 +89,7 @@ const offsetPosition = elementPosition - topOffset;
     });
 });
 
+// scroll to up page
 const arrowTop = document.getElementById('arrowTop');
 arrowTop.onclick = function() {
     window.scrollTo(pageXOffset, 0);
@@ -98,8 +98,7 @@ arrowTop.onclick = function() {
 
   window.addEventListener('scroll', function() {
     arrowTop.hidden = (pageYOffset < document.documentElement.clientHeight);
-});
-
+  });
 /* new WOW().init(); */
 
 $('form').submit(function(e) {
