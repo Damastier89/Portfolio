@@ -1,17 +1,20 @@
 $(document).ready(function (){
 // Welcome 
-    let today = new Date();
-    let hourNow = today.getHours();
-    let greeting;
-    
-    if (hourNow >= 18){greeting = 'Добрый вечер!';}
-        else if (hourNow >= 12){greeting = 'Добрый день!';}
-            else if (hourNow >= 0){greeting = 'Доброе утро!';}
-                else {greeting = 'Приветствую!';}
+let today = new Date();
+let hourNow = today.getHours();
+let greeting;
+
+if (hourNow >= 18){greeting = 'Добрый вечер!';}
+    else if (hourNow >= 12){greeting = 'Добрый день!';}
+        else if (hourNow >= 0){greeting = 'Доброе утро!';}
+            else {greeting = 'Приветствую!';}
  
 let welcome = document.querySelector('.greeting');
     welcome.insertAdjacentHTML('beforebegin', greeting);               
-            
+
+let year = new Date().getFullYear();
+let currentYear = document.querySelector('.current-year');
+    currentYear.insertAdjacentHTML('beforebegin', year + 1);
 // hamburger
 let hamburger = document.querySelector('.hamburger'),		
 	menu = document.querySelector('.menu'),
@@ -68,7 +71,7 @@ $(function () {
 });	
 
 // slow scroll
-document.querySelectorAll('a[href^="#"').forEach(link => {
+document.querySelectorAll('a[href^="#"]').forEach(link => {
 
     link.addEventListener('click', function(e) {
         e.preventDefault();
@@ -91,31 +94,89 @@ const offsetPosition = elementPosition - topOffset;
 
 // scroll to up page
 const arrowTop = document.getElementById('arrowTop');
-arrowTop.onclick = function() {
-    window.scrollTo(pageXOffset, 0);
-    // после scrollTo возникнет событие "scroll", так что стрелка автоматически скроется
+function openModalByScroll(selector) {
+  window.addEventListener('scroll', () => {
+    let scroll = window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight;
+    if (scroll) {
+      selector.style.display = 'block';
+    } else {
+      selector.style.display = 'none';
+    }
+  });
+}
+
+openModalByScroll(arrowTop);
+
+
+// arrowTop.onclick = function() {
+//     window.scrollTo(pageXOffset, 0);
+//     // после scrollTo возникнет событие "scroll", так что стрелка автоматически скроется
+//   };
+//   window.addEventListener('scroll', function() {
+//     arrowTop.hidden = (pageYOffset < document.documentElement.clientHeight);
+//   });
+
+
+const timer = (id, deadline) => {
+    const addZero = (number) => {
+    if (number <= 9) {
+        return '0' + number;
+    } else {
+        return number;
+    }
   };
 
-  window.addEventListener('scroll', function() {
-    arrowTop.hidden = (pageYOffset < document.documentElement.clientHeight);
-  });
-/* new WOW().init(); */
+    const getTimeRemaining = (endtime) => {
+    const time = Date.parse(endtime) - Date.parse(new Date());
+    const seconds = Math.floor((time / 1000) % 60);
+    const minutes = Math.floor((time / 1000 / 60) % 60);
+    const hours = Math.floor((time / (1000 * 60 * 60)) % 24);
+    const days = Math.floor((time / (1000 * 60 * 60 * 24)));
 
-$('form').submit(function(e) {
-	e.preventDefault();
-	$.ajax({
-		type: "POST",
-		url: "mailer/smart.php",
-		data: $(this).serialize()
-	}).done(function() {
-		$(this).find("input").val("");
-		/* $('#consultation, #order').fadeOut();
-		$('.overlay, #thanks').fadeIn('slow'); */
+    return {
+        'total': time,
+        'days': days,
+        'hours': hours,
+        'minutes': minutes,
+        'seconds': seconds,
+    };
+    };
 
-		$('form').trigger('reset');
-	});
-	return false;
-});
+    const setClock = (selector, endtime) => {
+    const timer = document.querySelector(selector),
+            days = timer.querySelector("#days"),
+            hours = timer.querySelector("#hours"),
+            minutes = timer.querySelector("#minutes"),
+            seconds = timer.querySelector("#seconds"),
+            timeInterval = setInterval(updateClock, 1000);
+    
+    updateClock();
 
+    function updateClock() {
+        const timer = getTimeRemaining(endtime);
+
+        days.textContent = addZero(timer.days);
+        hours.textContent = addZero(timer.hours);
+        minutes.textContent = addZero(timer.minutes);
+        seconds.textContent = addZero(timer.seconds);
+
+        if (timer.total <= 0) {
+        days.textContent = "00";
+        hours.textContent = "00";
+        minutes.textContent = "00";
+        seconds.textContent = "00";
+
+        clearInterval(timeInterval);
+        } 
+
+    };
+    }
+
+    setClock(id, deadline);
+
+};
+
+let deadline = '2022-12-31';
+timer('.container1', deadline);
 
 });
