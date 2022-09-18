@@ -42,3 +42,9 @@
   text-align: center;
   color: black;
 }
+
+@media (max-width : 576px) {
+  .timer1 {
+      margin: 40px 5px;
+  }
+}
